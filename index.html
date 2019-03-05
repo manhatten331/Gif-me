@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Gif that pause</title>
+</head>
+
+<body>
+    <h1>Gif me!</h1>
+
+    <div id="gifs-view"></div>
+
+    <form id="gif-form">
+        <label for="gif-name">Add a Gif to </label>
+        <input type="text" id="gif-name"><br>
+
+        <input id="add-gif" type="submit" value="Add a Gif">
+    </form>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+
+        var gifs = ["Dog", "Cat", "Fish"];
+    
+        function renderButtons () {
+
+            $("#gifs-view").empty();
+
+            for (var i = 0; i < gifs.length; i++) {
+                
+                var a = $("<button>");
+
+                a.addClass("gif");
+
+                a.attr("data-name", gifs[i]);
+
+                a.text(gifs[i]);
+
+                $("#gifs-view").append(a);
+            } 
+        }
+
+        $("#add-gif").on("click", function(event) {
+            // var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=cats";
+
+            event.preventDefault();
+            
+            var gifSearch = $("#gif-name").val().trim();
+
+            gifSearch.push(gifs);
+
+            renderButtons();
+            
+            console.log()
+
+            // $.ajax ({
+            //     url: queryURL,
+            //     method: "GET"
+            // })
+
+            //     .then (function(response) {
+            //         console.log(response);
+            //         var imageUrl = response.data.image_orginial_url;
+
+            //         var animals = $("<img>");
+
+            //         animals.attr("src", imageUrl);
+            //         animals.attr("alt", "Animal Images");
+
+            //         $("#images").prepend(animals);
+            //     });
+        });
+        renderButtons();
+    </script>
+</body>
+
+</html>

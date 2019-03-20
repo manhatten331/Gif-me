@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,72 +9,101 @@
 </head>
 
 <body>
-    <h1>Gif me!</h1>
+    <div class="container">
+        <h1>Gif me!</h1>
 
-    <div id="gifs-view"></div>
+        <div id="gifs-view"></div>
 
-    <form id="gif-form">
-        <label for="gif-name">Add a Gif to </label>
-        <input type="text" id="gif-name"><br>
+        <form id="gif-form">
+            <label for="gif-name">Add a Gif</label>
+            <input type="text" id="gif-name"><br>
 
-        <input id="add-gif" type="submit" value="Add a Gif">
-    </form>
+            <input id="add-gif" type="submit" value="Add a Gif">
+        </form>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script type="text/javascript">
+        <div id="animal-gifs"></div>
 
-        var gifs = ["Dog", "Cat", "Fish"];
-    
-        function renderButtons () {
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script type="text/javascript">
 
-            $("#gifs-view").empty();
+            var gifs = ["Dog", "Cat", "Fish"];
 
-            for (var i = 0; i < gifs.length; i++) {
-                
-                var a = $("<button>");
+            // function displayMovingGif() {
+            //     var gifSearch = $()
+            // }
 
-                a.addClass("gif");
+            function renderButtons() {
 
-                a.attr("data-name", gifs[i]);
+                $("#gifs-view").empty();
 
-                a.text(gifs[i]);
+                for (var i = 0; i < gifs.length; i++) {
 
-                $("#gifs-view").append(a);
-            } 
-        }
+                    var a = $("<button>");
 
-        $("#add-gif").on("click", function(event) {
-            // var queryURL = "https://api.giphy.com/v1/gifs/random?api_key=dc6zaTOxFJmzC&tag=cats";
+                    a.addClass("gif");
 
-            event.preventDefault();
-            
-            var gifSearch = $("#gif-name").val().trim();
+                    a.attr("data-name", gifs[i]);
 
-            gifSearch.push(gifs);
+                    a.text(gifs[i]);
+
+                    $("#gifs-view").append(a);
+                }
+            }
 
             renderButtons();
-            
-            console.log()
 
-            // $.ajax ({
-            //     url: queryURL,
-            //     method: "GET"
-            // })
+            $(".gif").on("click", function () {
 
-            //     .then (function(response) {
-            //         console.log(response);
-            //         var imageUrl = response.data.image_orginial_url;
+                var animals = $(this).text();
 
-            //         var animals = $("<img>");
+                var queryURL = "https://api.giphy.com/v1/gifs/search?q=" +
+                    animals + "&api_key=dc6zaTOxFJmzC&limit=10";
 
-            //         animals.attr("src", imageUrl);
-            //         animals.attr("alt", "Animal Images");
 
-            //         $("#images").prepend(animals);
-            //     });
-        });
-        renderButtons();
-    </script>
+                $.ajax({
+                    url: queryURL,
+                    method: "GET"
+                })
+
+                    .then(function (response) {
+
+                        var imageUrl = response.data;
+
+
+                        for (var i = 0; i < imageUrl.length; i++) {
+
+                            var animalDiv = $("<div>");
+
+                            var rating = imageUrl[i].rating;
+
+                            var p = $("<p>").text("Rating: " + rating);
+
+                            var animalImage = $("<img>");
+
+                            animalImage.attr("src", imageUrl[i].images.fixed_height.url)
+
+                            animalDiv.append(p);
+
+                            animalDiv.append(animalImage);
+
+                            $("#animal-gifs").prepend(animalDiv);
+                        }
+
+                    });
+            });
+
+            $("#add-gif").on("click", function (event) {
+                event.preventDefault();
+
+                var userInput = $("#gif-name").text();
+
+                console.log(userInput)
+
+                gifs.push(userInput);
+            })
+
+        </script>
+    </div>
 </body>
 
 </html>
